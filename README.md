@@ -1,6 +1,6 @@
 # Sqlite3 port of mysql test_db
 
-This project hosts the Sqlite3 db file ported from mysql test_db found at https://github.com/datacharmer/test_db.  To use this project, download employees.zip, unzip and open using sqlite3 command line tool.
+This project hosts the Sqlite3 db file ported from mysql test_db found at https://github.com/datacharmer/test_db.  To use this project, download employees.db.bz2, unzip and open using sqlite3 command line tool.
 
 RowIds, Foreign keys, secondary keys, defaults and cascade have not been ported. If necessary these can be added easily.
 
