@@ -4,7 +4,56 @@ This project hosts the Sqlite3 db file ported from mysql test_db found at https:
 
 RowIds, Foreign keys, secondary keys, defaults and cascade have not been ported. If necessary these can be added easily.
 
-Given below is the README from the other repository, with the usage part removed.  This project is also hosted under the same license (CC-BY-SA-3.0).
+Given below Schema section is the README from the other repository, with the usage part removed.  This project is also hosted under the same license (CC-BY-SA-3.0).
+
+# Schema
+
+```sql
+CREATE TABLE employees (
+    emp_no      INT             NOT NULL,
+    birth_date  DATE            NOT NULL,
+    first_name  VARCHAR(14)     NOT NULL,
+    last_name   VARCHAR(16)     NOT NULL,
+    gender      CHAR(1)         NOT NULL,    
+    hire_date   DATE            NOT NULL,
+    PRIMARY KEY (emp_no)
+) without rowid;
+CREATE TABLE departments (
+    dept_no     CHAR(4)         NOT NULL,
+    dept_name   VARCHAR(40)     NOT NULL,
+    PRIMARY KEY (dept_no)
+) without rowid;
+CREATE TABLE dept_manager (
+   dept_no      CHAR(4)         NOT NULL,
+   emp_no       INT             NOT NULL,
+   from_date    DATE            NOT NULL,
+   to_date      DATE            NOT NULL,
+   PRIMARY KEY  (emp_no, dept_no)
+) without rowid;
+CREATE TABLE dept_emp (
+    emp_no      INT             NOT NULL,
+    dept_no     CHAR(4)         NOT NULL,
+    from_date   DATE            NOT NULL,
+    to_date     DATE            NOT NULL,
+    PRIMARY KEY (emp_no,dept_no)
+) without rowid;
+CREATE TABLE titles (
+    emp_no      INT             NOT NULL,
+    title       VARCHAR(50)     NOT NULL,
+    from_date   DATE            NOT NULL,
+    to_date     DATE,
+    PRIMARY KEY (emp_no,title, from_date)
+) without rowid;
+CREATE TABLE salaries (
+    emp_no      INT             NOT NULL,
+    salary      INT             NOT NULL,
+    from_date   DATE            NOT NULL,
+    to_date     DATE            NOT NULL,
+    PRIMARY KEY (emp_no, from_date)
+) without rowid;
+CREATE INDEX emp_first_name on employees (first_name);
+CREATE INDEX emp_last_name on employees (last_name);
+```
 
 # test_db
 A sample database with an integrated test suite, used to test your applications and database servers
