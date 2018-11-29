@@ -8,6 +8,8 @@ Given below Schema section is the README from the other repository, with the usa
 
 # Schema
 
+![Schema Image](employees-schema.png?raw=true)
+
 ```sql
 CREATE TABLE employees (
     emp_no      INT             NOT NULL,
