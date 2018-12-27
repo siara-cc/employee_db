@@ -2,7 +2,7 @@
 
 This project hosts the Sqlite3 db file ported from mysql test_db found at https://github.com/datacharmer/test_db.  To use this project, download employees.db.bz2, unzip and open using sqlite3 command line tool.
 
-RowIds, Foreign keys, secondary keys, defaults and cascade have not been ported. If necessary these can be added easily.
+Minor changes have been made to the schema per suggestions from people of `sqlite-users` group.
 
 Given below Schema section is the README from the other repository, with the usage part removed.  This project is also hosted under the same license (CC-BY-SA-3.0).
 
@@ -12,52 +12,58 @@ Given below Schema section is the README from the other repository, with the usa
 
 ```sql
 CREATE TABLE employees (
-    emp_no      INT             NOT NULL,
-    birth_date  DATE            NOT NULL,
-    first_name  VARCHAR(14)     NOT NULL,
-    last_name   VARCHAR(16)     NOT NULL,
-    gender      CHAR(1)         NOT NULL,    
-    hire_date   DATE            NOT NULL,
-    PRIMARY KEY (emp_no)
-) without rowid;
+    emp_id      INTEGER  NOT NULL,
+    birth_date  DATE     NOT NULL,
+    first_name  TEXT     NOT NULL,
+    last_name   TEXT     NOT NULL,
+    gender      CHAR     NOT NULL check(gender="M" or gender="F"),    
+    hire_date   DATE     NOT NULL,
+    PRIMARY KEY (emp_id)
+);
 CREATE TABLE departments (
-    dept_no     CHAR(4)         NOT NULL,
-    dept_name   VARCHAR(40)     NOT NULL,
-    PRIMARY KEY (dept_no)
-) without rowid;
+    dept_id     INTEGER  NOT NULL,
+    dept_name   TEXT     NOT NULL,
+    PRIMARY KEY (dept_id),
+    CONSTRAINT dept_name_unique UNIQUE (dept_name)
+);
 CREATE TABLE dept_manager (
-   dept_no      CHAR(4)         NOT NULL,
-   emp_no       INT             NOT NULL,
-   from_date    DATE            NOT NULL,
-   to_date      DATE            NOT NULL,
-   PRIMARY KEY  (emp_no, dept_no)
-) without rowid;
+   dept_id      INTEGER  NOT NULL,
+   emp_id       INTEGER  NOT NULL,
+   from_date    DATE     NOT NULL,
+   to_date      DATE     NOT NULL,
+   FOREIGN KEY (emp_id)  REFERENCES employees (emp_id)    ON DELETE CASCADE,
+   FOREIGN KEY (dept_id) REFERENCES departments (dept_id) ON DELETE CASCADE,
+   PRIMARY KEY (emp_id, dept_id)
+);
 CREATE TABLE dept_emp (
-    emp_no      INT             NOT NULL,
-    dept_no     CHAR(4)         NOT NULL,
-    from_date   DATE            NOT NULL,
-    to_date     DATE            NOT NULL,
-    PRIMARY KEY (emp_no,dept_no)
-) without rowid;
+    emp_id      INTEGER  NOT NULL,
+    dept_id     CHAR(4)  NOT NULL,
+    from_date   DATE     NOT NULL,
+    to_date     DATE     NOT NULL,
+    FOREIGN KEY (emp_id)  REFERENCES employees   (emp_id)  ON DELETE CASCADE,
+    FOREIGN KEY (dept_id) REFERENCES departments (dept_id) ON DELETE CASCADE,
+    PRIMARY KEY (emp_id, dept_id)
+);
 CREATE TABLE titles (
-    emp_no      INT             NOT NULL,
-    title       VARCHAR(50)     NOT NULL,
-    from_date   DATE            NOT NULL,
+    emp_id      INTEGER  NOT NULL,
+    title       TEXT     NOT NULL,
+    from_date   DATE     NOT NULL,
     to_date     DATE,
-    PRIMARY KEY (emp_no,title, from_date)
-) without rowid;
+    FOREIGN KEY (emp_id) REFERENCES employees (emp_id) ON DELETE CASCADE,
+    PRIMARY KEY (emp_id,title, from_date)
+);
 CREATE TABLE salaries (
-    emp_no      INT             NOT NULL,
+    emp_id      INT             NOT NULL,
     salary      INT             NOT NULL,
     from_date   DATE            NOT NULL,
     to_date     DATE            NOT NULL,
-    PRIMARY KEY (emp_no, from_date)
-) without rowid;
-CREATE INDEX emp_first_name on employees (first_name);
-CREATE INDEX emp_last_name on employees (last_name);
+    FOREIGN KEY (emp_id) REFERENCES employees (emp_id) ON DELETE CASCADE,
+    PRIMARY KEY (emp_id, from_date)
+);
 ```
 
 # test_db
+
 A sample database with an integrated test suite, used to test your applications and database servers
 
 This repository was migrated from [Launchpad](https://launchpad.net/test-db).
