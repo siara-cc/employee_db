@@ -37,7 +37,7 @@ CREATE TABLE dept_manager (
 );
 CREATE TABLE dept_emp (
     emp_id      INTEGER  NOT NULL,
-    dept_id     CHAR(4)  NOT NULL,
+    dept_id     INTEGER  NOT NULL,
     from_date   DATE     NOT NULL,
     to_date     DATE     NOT NULL,
     FOREIGN KEY (emp_id)  REFERENCES employees   (emp_id)  ON DELETE CASCADE,
@@ -53,8 +53,8 @@ CREATE TABLE titles (
     PRIMARY KEY (emp_id,title, from_date)
 );
 CREATE TABLE salaries (
-    emp_id      INT             NOT NULL,
-    salary      INT             NOT NULL,
+    emp_id      INTEGER         NOT NULL,
+    salary      NUMBER          NOT NULL,
     from_date   DATE            NOT NULL,
     to_date     DATE            NOT NULL,
     FOREIGN KEY (emp_id) REFERENCES employees (emp_id) ON DELETE CASCADE,
